@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  h1= title
+  p Bienvenido al #{title}. Utilice los filtros para encontrar su farmacia más cercana
+  select#location.select(name='location')
+    #{locations}
+    
+  b 
+  |&nbsp;
+  b 
+  input#name.form-control(type="text", name="postid"  placeholder="Nombre farmacia")
+
+  b 
+  |&nbsp;
+  b 
+
+  button(type='button' value="buscar" onclick='search()') Buscar
+  //- Render MAP
+  #map(style="width: 100vw; height: 600px;")
+  script.
+    let coordinates = !{data};
+    var map = L.map('map').setView([-33.447487, -70.673676], 12);
+    
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        accessToken: 'pk.eyJ1Ijoiam9hbm9sbW9zIiwiYSI6ImNrNG03djVhYzExNzkzbG9nMXZiMjU4dHcifQ.i0Sckx-Bmc0SXG26bF6VIg'
+    }).addTo(map);
+      for (var i = 0; i < coordinates.length; i++) {
+        marker = new L.marker([coordinates[i][1],coordinates[i][2]])
+          .bindPopup(coordinates[i][0])
+          .addTo(map);
+      }
+    
+  script.
+    function search() { // Search with filters
+      var inputVal = document.getElementById("name").value;
+      var selectVal = document.getElementById("location").value;
+      //- location.replace("localhost:3000?location=" + selectVal + '&pharmacy=' + inputVal);
+      window.location.search = '&location='+ selectVal + '&pharmacy=' + inputVal.toUpperCase();
+    }
