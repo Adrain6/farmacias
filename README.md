@@ -4,8 +4,8 @@ Contain farmacies in santiago filtered by commune or name
 # Project in nodeJS V 10.16.3
 Steps to install
 - clone repo
-- /npm Install
 - cd to folder
+- /npm Install
 - /npm start
 - go to localhost:3000
 
